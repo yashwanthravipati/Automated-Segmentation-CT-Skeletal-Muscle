@@ -7,7 +7,7 @@ Consists of two models: Slice Selection Model and Segmentation Model
 
 Steps to train and test
 
-1) The input data needs to be into the data folder into data_in_niftii folder
+1) The input data needs to be into the data folder into raw_data folder
 
 2) Preprocessing script in the codebase folder will process the files by repacing to 1x1 on XY plane and bounded box cropping the iomage with 512x512 dimensions
 
