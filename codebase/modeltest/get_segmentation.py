@@ -9,18 +9,18 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def test(image_dir, model_weight_path, l3_slice_csv_path, output_dir):
+def test(image_dir, model_weight_path, c3_slice_csv_path, output_dir):
     
-    model = get_unet_2D( 2,   (256, 256, 1)    ,num_convs=2,  activation='relu',
+    model = get_unet_2D( 2,   (512, 512, 1)    ,num_convs=2,  activation='relu',
             compression_channels=[16, 32, 64, 128, 256, 512],
             decompression_channels=[256, 128, 64, 32, 16]   )
     model.load_weights(model_weight_path)
     
     
-    df_prediction_l3 = pd.read_csv(l3_slice_csv_path,index_col=0)
-    for idx in  range(df_prediction_l3.shape[0]):
+    df_prediction_c3 = pd.read_csv(c3_slice_csv_path,index_col=0)
+    for idx in  range(df_prediction_c3.shape[0]):
         
-        patient_id = str(df_prediction_l3.iloc[idx,0])
+        patient_id = str(df_prediction_c3.iloc[idx,0])
         infer_3d_path = output_dir + patient_id + '.seg.nrrd'
 
         image_path = get_image_path_by_id(patient_id,image_dir)
@@ -30,12 +30,12 @@ def test(image_dir, model_weight_path, l3_slice_csv_path, output_dir):
         image_array_3d  = sitk.GetArrayFromImage(image_sitk)
         im_xy_size = image_array_3d.shape[1]
 
-        l3_slice_auto = int(df_prediction_l3.iloc[idx,1])
+        c3_slice_auto = int(df_prediction_c3.iloc[idx,1])
         print("c3 slice")
-        print(l3_slice_auto)
+        print(c3_slice_auto)
 
-        image_array  = sitk.GetArrayFromImage(image_sitk)[l3_slice_auto,:,:].reshape(1,256,256,1) 
-        image_array_2d  = sitk.GetArrayFromImage(image_sitk)[l3_slice_auto,:,:]
+        image_array  = sitk.GetArrayFromImage(image_sitk)[c3_slice_auto,:,:].reshape(1,512,512,1) 
+        image_array_2d  = sitk.GetArrayFromImage(image_sitk)[c3_slice_auto,:,:]
         target_area = remove_arm_area(image_array_2d)
         infer_seg_array = model.predict(image_array)
         
@@ -48,7 +48,7 @@ def test(image_dir, model_weight_path, l3_slice_csv_path, output_dir):
        
         infer_seg_array_2d = muscle_seg+sfat_seg+vfat_seg
         infer_seg_array_3d = np.zeros(image_array_3d.shape)
-        infer_seg_array_3d[l3_slice_auto,:,:] = infer_seg_array_2d
+        infer_seg_array_3d[c3_slice_auto,:,:] = infer_seg_array_2d
 
         
         
@@ -58,7 +58,7 @@ def test(image_dir, model_weight_path, l3_slice_csv_path, output_dir):
         plt.subplots_adjust(wspace=0.05)
         ax[0].imshow(image_array_2d)
 #         ax[0].set_title('L3_slice Predicted: '+str(l3_slice_auto), fontsize=18)
-        ax[0].set_title('C3_slice auto selected: '+str(l3_slice_auto), fontsize=18)
+        ax[0].set_title('C3_slice auto selected: '+str(c3_slice_auto), fontsize=18)
         infer_seg_array_2d_1  = infer_seg_array_2d[0]
        
         ax[1].imshow(infer_seg_array_2d_1)
@@ -72,7 +72,7 @@ def test(image_dir, model_weight_path, l3_slice_csv_path, output_dir):
         
         write_sitk_from_array_by_template(infer_seg_array_3d, image_sitk, infer_3d_path )
 
-        print(idx,'th image:',patient_id,'(C3_slice_auto:',l3_slice_auto,')  segmentation_in_NIFTI saved into')
+        print(idx,'th image:',patient_id,'(C3_slice_auto:',c3_slice_auto,')  segmentation_in_NIFTI saved into')
         print(infer_3d_path)
         print()
 

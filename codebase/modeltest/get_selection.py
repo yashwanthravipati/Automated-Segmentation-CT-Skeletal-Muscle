@@ -31,7 +31,7 @@ def get_slice_number_from_prediction(predictions):
 def test(image_dir, model_weight_path,csv_write_path):
     
     #with tf.device('/gpu:0'):
-    model = DenseNet(img_dim=(256, 256, 1), 
+    model = DenseNet(img_dim=(512, 512, 1), 
                 nb_layers_per_block=4, nb_dense_block=4, growth_rate=12, nb_initial_filters=16, 
                 compression_rate=0.5, sigmoid_output_activation=True, 
                 activation_type='relu', initializer='glorot_uniform', output_dimension=1, batch_norm=True )
@@ -51,9 +51,7 @@ def test(image_dir, model_weight_path,csv_write_path):
         series = np.dstack([resize_func(im) for im in windowed_images])
         #series = np.dstack([resize_func(im) for im in image_array])
         series = np.transpose(series[:, :, :, np.newaxis], [2, 0, 1, 3])
-        predictions = model.predict(image_array)
-        print("predictions")
-        print(predictions)
+        predictions = model.predict(series)
         chosen_index = get_slice_number_from_prediction(predictions)
     
         df_inter = pd.DataFrame({'patient_id':image_path.split('/')[-1].split('.')[0],
