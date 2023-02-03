@@ -5,7 +5,7 @@ Code base for auto segmenting the skeletal muscle mass from 3D CT images
 Consists of two deep-learning models: Slice Selection Model and Segmentation Model
 
 
-Steps to train and test
+Scripts to train and test
 
 1) Preprocessing (optional) : This is an optional step for processing CT inages that are different from MDACC files. The pre-processing does normalizetion of files.
 
