@@ -26,10 +26,10 @@ def train(data_dir, model_dir, epochs=100, name=None, batch_size=256,
     args = locals()
 
     # Set up dataset
-    train_image_dir = os.path.join(data_dir, 'selection_npy/train')
-    val_image_dir = os.path.join(data_dir, 'selection_npy/val')
-    train_meta_file = os.path.join(data_dir, 'selection_meta/train.csv')
-    val_meta_file = os.path.join(data_dir, 'selection_meta/val.csv')
+    train_image_dir = os.path.join(data_dir, 'prediction_npy/train')
+    val_image_dir = os.path.join(data_dir, 'prediction_npy/val')
+    train_meta_file = os.path.join(data_dir, 'prediction_meta/train.csv')
+    val_meta_file = os.path.join(data_dir, 'prediction_meta/val.csv')
     train_labels = pd.read_csv(train_meta_file)['ZOffset'].values
     val_labels = pd.read_csv(val_meta_file)['ZOffset'].values
     print('\n\n\n','train_labels.shape:',train_labels.shape,'tuning_labels.shape:', val_labels.shape,'\n\n\n')
