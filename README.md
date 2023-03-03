@@ -2,7 +2,7 @@
 
 Code base for auto segmenting the skeletal muscle mass from 3D CT images
 
-Consists of two deep-learning models: Slice Selection Model and Segmentation Model
+Consists of two deep-learning models: Slice Prediction Model and Segmentation Model
 
 
 Scripts to train and test
