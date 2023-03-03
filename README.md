@@ -7,7 +7,7 @@ Consists of two deep-learning models: Slice Prediction Model and Segmentation Mo
 
 Scripts to train and test
 
-1) Preprocessing (optional) : This is an optional step for processing CT inages that are different from MDACC files. The pre-processing does normalizetion of files.
+1) Preprocessing (optional) : This is an optional step for processing CT inages that are in different format and crop than the training/test datasets used. The pre-processing does normalizetion of files.
 
 2) Data-Prep : This script processes .nrrd or .nifti format files and prepares the training files needed for both Slice Selection Model and Segmentation Model training.
 
